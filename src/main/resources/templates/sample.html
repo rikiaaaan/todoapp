@@ -89,24 +89,24 @@
 			<section>
 				<h3>マイタスク</h3>
 				<form method="post" class="task" action="@{/update}">
-					<input type="checkbox" name="doneFlg" value="0" />
+					<input type="checkbox" name="done_flg" value="0" />
 					<input type="hidden" name="id" value="1" />
 					<input type="text" name="title" value="aiueo" />
-					<input type="date" name="timeLimit" value="2024-08-10" />
+					<input type="date" name="time_limit" value="2024-08-10" />
 					<input type="submit" value="更新"/>
 				</form>
 				<form method="post" class="task" action="@{/update}">
-					<input type="checkbox" name="doneFlg" value="0" />
+					<input type="checkbox" name="done_flg" value="0" />
 					<input type="hidden" name="id" value="1" />
 					<input type="text" name="title" value="sasisuseso" />
-					<input type="date" name="timeLimit" value="2024-08-10" />
+					<input type="date" name="time_limit" value="2024-08-10" />
 					<input type="submit" value="更新"/>
 				</form>
 				<form method="post" class="task" action="@{/update}">
-					<input type="checkbox" name="doneFlg" value="0" />
+					<input type="checkbox" name="done_flg" value="0" />
 					<input type="hidden" name="id" value="1" />
 					<input type="text" name="title" value="VIMをマスターする" />
-					<input type="date" name="timeLimit" value="2024-08-10" />
+					<input type="date" name="time_limit" value="2024-08-10" />
 					<input type="submit" value="更新"/>
 				</form>
 			</section>
@@ -114,17 +114,17 @@
 			<section>
 				<h3>完了済み</h3>
 				<form method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
-					<input type="checkbox" name="doneFlg" value="1" />
+					<input type="checkbox" name="done_flg" value="1" />
 					<input type="hidden" name="id" value="2" />
 					<input type="text" name="title" value="kakikukeko" style="text-decoration: line-through;"/>
-					<input type="date" name="timeLimit" value="2024-08-10" />
+					<input type="date" name="time_limit" value="2024-08-10" />
 					<input type="submit" value="更新"/>
 				</form>
 				<form method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
-					<input type="checkbox" name="doneFlg" value="1" />
+					<input type="checkbox" name="done_flg" value="1" />
 					<input type="hidden" name="id" value="2" />
 					<input type="text" name="title" value="朝食を食べる" style="text-decoration: line-through;"/>
-					<input type="date" name="timeLimit" value="2024-08-10" />
+					<input type="date" name="time_limit" value="2024-08-10" />
 					<input type="submit" value="更新"/>
 				</form>
 				<form method="post" class="task" th:action="@{/delete}">
@@ -136,7 +136,7 @@
 				<h3>新しいタスクを追加</h3>
 				<form method="post" class="task" th:action="@{/add}">
 					<input type="text" name="title" />
-					<input type="date" name="timeLimit" />
+					<input type="date" name="time_limit" />
 					<input type="submit" name="追加" />
 				</form>
 			</section>

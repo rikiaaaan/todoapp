@@ -7,6 +7,6 @@ public class Todo {
 	
 	private long id;
 	private String title;
-	private int doneFlg;
-	private String timeLimit;
+	private int done_flg;
+	private String time_limit;
 }
