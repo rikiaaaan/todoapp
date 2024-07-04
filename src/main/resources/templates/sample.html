@@ -76,6 +76,41 @@
 			text-decoration: underline;
 			font-weight: bolder;
 		}
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+			user-select: none;
+			width: 80%;
+			margin: 0 auto;
+		}
+		
+		td {
+			font-size: 2em;
+			padding: 0.25em;
+			border: solid;
+		}
+
+		th {
+			border: solid;
+			padding: 0.5em 0;
+		}
+
+		td, th {
+			border-color: white;
+		}
+
+		th:first-child, td:first-child {
+			color: red;
+		}
+
+		th:last-child, td:last-child {
+			color: aqua;
+		}
+
+		td.is-disabled {
+			color: #6f6f6f;
+		}
 	</style>
 </head>
 <body>
@@ -140,9 +175,160 @@
 					<input type="submit" name="追加" />
 				</form>
 			</section>
+
+			<section>
+				<button id="setCalenderPrevious">先月</button>
+				<button id="setCalenderNext">翌月</button>
+				<!-- <h4>2024/06 June</h4>
+				<table class="calender">
+					<tr>
+						<th>Sun.</th>
+						<th>Mon.</th>
+						<th>Tue.</th>
+						<th>Wed.</th>
+						<th>Thu.</th>
+						<th>Fri.</th>
+						<th>Sat.</th>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
+						<td>5</td>
+						<td>6</td>
+						<td>7</td>
+					</tr>
+					<tr>
+						<td>8</td>
+						<td>9</td>
+						<td>10</td>
+						<td>11</td>
+						<td>12</td>
+						<td>13</td>
+						<td>14</td>
+					</tr>
+					<tr>
+						<td>15</td>
+						<td>16</td>
+						<td>17</td>
+						<td>18</td>
+						<td>19</td>
+						<td>20</td>
+						<td>21</td>
+					</tr>
+					<tr>
+						<td>22</td>
+						<td>23</td>
+						<td>24</td>
+						<td>25</td>
+						<td>26</td>
+						<td>27</td>
+						<td>28</td>
+					</tr>
+					<tr>
+						<td>29</td>
+						<td>30</td>
+						<td>31</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table> -->
+				<div id="dynamicCalender"></div>
+			</section>
 		</main>
 	</div>
 
 	<p class="keikoku">これはサンプルファイルだカス。本番用じゃねえぞカス</p>
+
+	<script>
+		function createCalenderHtml(date) {
+			const WEEK_STR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+			//一週間は何日あるかの定数
+			const WEEK_COUNT = 7;
+			//一か月に何週間あるかの定数
+			const MONTH_WEEKS_COUNT = 6;
+
+			const currentYear = date.getFullYear();
+			const currentMonth = date.getMonth() + 1;
+
+			//月の最初の日付
+			const monthStartDate = new Date(currentYear, currentMonth - 1, 1);
+			//月の最後の日付
+			//(currentMonth + 1)月の0日目 => currentMonthの最終日
+			const monthEndDay = new Date(currentYear, currentMonth, 0);
+
+			//前月の最後の日付
+			//(currentMonth - 1)月の0日目 => 前月の最終日
+			const lastMonthEndDate = new Date(currentYear, currentMonth - 1, 0);
+
+			const endDayCount = monthEndDay.getDate();
+			const monthStartDay = monthStartDate.getDay();
+
+			let dayCount = 1;
+			let calenderHtml = "";
+
+			calenderHtml += `<h1>${currentYear}/${currentMonth}</h1>`;
+			calenderHtml += "<table>";
+
+			//Sun. ~ Sat. の上のやつ
+			calenderHtml += "<tr>";
+			for (let i = 0; i < WEEK_COUNT; i++) {
+				calenderHtml += `<th>${WEEK_STR[i]}.</th>`;
+			}
+			calenderHtml += "</tr>";
+
+
+			for (let i = 0; i < MONTH_WEEKS_COUNT; i++) {
+				calenderHtml += "<tr>";
+
+				for (let j = 0; j < WEEK_COUNT; j++) {
+					if (i === 0 && j < monthStartDay) {
+						//月の最初の週かつ、月の始まりの曜日の前なら
+						let num = lastMonthEndDate.getDate() - monthStartDay + j + 1;
+						calenderHtml += `<td class="is-disabled">${num}</td>`;
+					} else if (dayCount > endDayCount) {
+						//月の
+						let num = dayCount - endDayCount;
+						calenderHtml += `<td class="is-disabled">${num}</td>`;
+						dayCount++;
+					} else {
+						calenderHtml += `<td>${dayCount}</td>`;
+						dayCount++;
+					}
+				}
+
+				calenderHtml += "</tr>";
+			}
+			return calenderHtml;
+		}
+
+		function setCalenderHtml(date) {
+			const calenderHtml = createCalenderHtml(date);
+
+			document.getElementById("dynamicCalender").innerHTML = calenderHtml;
+		}
+
+		let monthOffset = 0;
+		const currentDate = new Date();
+		//現在の日付で、カレンダーを作成、セット
+		setCalenderHtml(new Date());
+
+		document.getElementById("setCalenderPrevious").addEventListener("click", (ev) => {
+			monthOffset--;
+			const year = currentDate.getFullYear();
+			const month = currentDate.getMonth();
+			setCalenderHtml(new Date(year, month + monthOffset));
+		});
+		document.getElementById("setCalenderNext").addEventListener("click", (ev) => {
+			monthOffset++;
+			const year = currentDate.getFullYear();
+			const month = currentDate.getMonth();
+			setCalenderHtml(new Date(year, month + monthOffset));
+		});
+
+	</script>
 </body>
 </html>
