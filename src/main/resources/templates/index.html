@@ -69,6 +69,42 @@
 		.task {
 			scale: 1.25;
 		}
+
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+			user-select: none;
+			width: 80%;
+			margin: 0 auto;
+		}
+		
+		td {
+			font-size: 2em;
+			padding: 0.25em;
+			border: solid;
+		}
+
+		th {
+			border: solid;
+			padding: 0.5em 0;
+		}
+
+		td, th {
+			border-color: white;
+		}
+
+		th:first-child, td:first-child {
+			color: red;
+		}
+
+		th:last-child, td:last-child {
+			color: aqua;
+		}
+
+		td.is-disabled {
+			color: #6f6f6f;
+		}
 	</style>
 </head>
 <body>
@@ -112,7 +148,120 @@
 					<input type="submit" name="追加" value="追加"/>
 				</form>
 			</section>
+
+			<section>
+				<button id="setCalenderPrevious">先月</button>
+				<button id="setCalenderNext">翌月</button>
+				<div id="dynamicCalender"></div>
+			</section>
 		</main>
 	</div>
+
+	<script>
+		const INPUT_VALUE_DATE_REGEX = /(\d{4})-(\d{2})-(\d{2})T.*/;
+
+		function createCalenderHtml(date) {
+			const WEEK_STR_ARR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+			//一週間は何日あるかの定数
+			const WEEK_COUNT = 7;
+			//一か月に何週間あるかの定数
+			const MONTH_WEEKS_COUNT = 6;
+
+			const currentYear = date.getFullYear();
+			const currentMonth = date.getMonth() + 1;
+
+			//月の最初の日付
+			const monthStartDate = new Date(currentYear, currentMonth - 1, 1);
+			//月の最後の日付
+			//(currentMonth + 1)月の0日目 => currentMonthの最終日
+			const monthEndDay = new Date(currentYear, currentMonth, 0);
+
+			//前月の最後の日付
+			//(currentMonth)月の0日目 => 前月の最終日
+			const lastMonthEndDate = new Date(currentYear, currentMonth - 1, 0);
+
+			const endDayCount = monthEndDay.getDate();
+			const monthStartDay = monthStartDate.getDay();
+
+			let dayCount = 1;
+			let calenderHtml = "";
+
+			calenderHtml += `<h1>${currentYear}/${currentMonth}</h1>`;
+			calenderHtml += "<table>";
+
+			//Sun. ~ Sat. のやつ
+			calenderHtml += "<tr>";
+			for (let i = 0; i < WEEK_COUNT; i++) {
+				calenderHtml += `<th>${WEEK_STR_ARR[i]}.</th>`;
+			}
+			calenderHtml += "</tr>";
+
+
+			for (let i = 0; i < MONTH_WEEKS_COUNT; i++) {
+				calenderHtml += "<tr>";
+
+				for (let j = 0; j < WEEK_COUNT; j++) {
+					if (i === 0 && j < monthStartDay) {
+						//月の最初の週かつ、月の始まりの曜日の前なら
+						let num = lastMonthEndDate.getDate() - monthStartDay + j + 1;
+						calenderHtml += `<td class="is-disabled">${num}</td>`;
+					} else if (dayCount > endDayCount) {
+						//月の
+						let num = dayCount - endDayCount;
+						calenderHtml += `<td class="is-disabled">${num}</td>`;
+						dayCount++;
+					} else {
+						calenderHtml += `<td>${dayCount}</td>`;
+						dayCount++;
+					}
+				}
+
+				calenderHtml += "</tr>";
+			}
+			return calenderHtml;
+		}
+
+		function setCalenderHtml(date) {
+			const calenderHtml = createCalenderHtml(date);
+
+			document.getElementById("dynamicCalender").innerHTML = calenderHtml;
+		}
+
+		function markCalender() {
+			//document.getElementsByClassName("undoneList")[1].querySelector("input[name=time_limit]").value
+		}
+
+
+		class Calender {
+			constructor() {
+				const currentDate = this.currentDate = new Date();
+				this.monthOffset = 0;
+				setCalenderHtml(currentDate);
+			}
+
+			setCalenderLastMonth() {
+				this.monthOffset--;
+				const year = this.currentDate.getFullYear();
+				const month = this.currentDate.getMonth();
+				setCalenderHtml(new Date(year, month + this.monthOffset));
+			}
+
+			setCalenderNextMonth() {
+				this.monthOffset++;
+				const year = this.currentDate.getFullYear();
+				const month = this.currentDate.getMonth();
+				setCalenderHtml(new Date(year, month + this.monthOffset));
+			}
+		}
+		const calender = new Calender();
+
+		document.getElementById("setCalenderPrevious").addEventListener("click", (ev) => {
+			calender.setCalenderLastMonth();
+		});
+		document.getElementById("setCalenderNext").addEventListener("click", (ev) => {
+			calender.setCalenderNextMonth();
+		});
+
+	</script>
 </body>
 </html>
