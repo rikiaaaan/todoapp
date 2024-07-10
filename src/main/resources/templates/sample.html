@@ -346,11 +346,11 @@
 			<div class="todo-container">
 
 				<div class="container-controller animation-button-container">
-					<button>未完了のタスクを表示</button>
-					<button>完了済みのタスクを表示</button>
+					<button id="showUndoneList">未完了のタスクを表示</button>
+					<button id="showDoneList">完了済みのタスクを表示</button>
 				</div>
 
-				<div class="container-wrapper">
+				<div class="container-wrapper" id="undoneWrapper">
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の未完了のマイタスク</h3>
 						<div class="task-list" id="undoneListDisplayer">
@@ -367,7 +367,7 @@
 					</section>
 				</div>
 
-				<div class="container-wrapper">
+				<div class="container-wrapper" id="doneWrapper">
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の完了済みタスク</h3>
 						<div class="task-list" id="doneList">
@@ -561,7 +561,57 @@
 				setCalenderHtml(currentDate);
 			}
 		}
+
+		class ContainerWrapperController {
+			constructor() {
+				this.undoneListShowing = true;
+				this.doneListShowing = false;
+
+				document.getElementById("doneWrapper").classList.add("hidden-container-wrapper");
+			}
+
+			showUndoneList() {
+				if (!this.undoneListShowing && this.doneListShowing) {
+					const undoneWrapper = document.getElementById("undoneWrapper");
+					const doneWrapper = document.getElementById("doneWrapper");
+
+					if (undoneWrapper && doneWrapper) {
+						undoneWrapper.classList.remove("hidden-container-wrapper");
+						doneWrapper.classList.add("hidden-container-wrapper");
+					}
+					this.undoneListShowing = true;
+					this.doneListShowing = false;
+				} else {
+					console.warn("undoneListはすでに表示されています。");
+				}
+			}
+
+			showDoneList() {
+				if (this.undoneListShowing && !this.doneListShowing) {
+					const undoneWrapper = document.getElementById("undoneWrapper");
+					const doneWrapper = document.getElementById("doneWrapper");
+
+					if (undoneWrapper && doneWrapper) {
+						undoneWrapper.classList.add("hidden-container-wrapper");
+						doneWrapper.classList.remove("hidden-container-wrapper");
+					}
+
+					this.undoneListShowing = false;
+					this.doneListShowing = true;
+				} else {
+					console.warn("doneListはすでに表示されています。");
+				}
+			}
+		}
 		const calenderController = new CalenderController();
+		const containerWrapperController = new ContainerWrapperController();
+
+		document.getElementById("showUndoneList").addEventListener("click", (e) => {
+			containerWrapperController.showUndoneList();
+		});
+		document.getElementById("showDoneList").addEventListener("click", (e) => {
+			containerWrapperController.showDoneList();
+		});
 
 		document.getElementById("setCalenderLastMonth").addEventListener("click", (e) => {
 			calenderController.setCalenderLastMonth();
