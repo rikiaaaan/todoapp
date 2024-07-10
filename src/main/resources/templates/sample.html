@@ -34,6 +34,10 @@
 			}
 		}
 
+		.hidden {
+			display: none;
+		}
+
 		.back-image {
 			position: fixed;
 			left: 0;
@@ -41,7 +45,7 @@
 			width: 100%;
 			height: 100%;
 			z-index: -1;
-			opacity: 0.25;
+			opacity: 0.5;
 		}
 
 		header {
@@ -74,8 +78,7 @@
 		}
 
 		section > :not(:first-child),
-		.undone-list > :not(:first-child),
-		.done-list > :not(:first-child) {
+		.task-list > :not(:first-child) {
 			margin-top: 0.5em;
 		}
 
@@ -96,11 +99,22 @@
 			margin-top: 2em;
 		}
 
+		.container-controller {
+			height: 3em;
+			border: 0.25em solid lime;
+			border-radius: 1.2em;
+		}
+
 		.container-wrapper {
 			height: 40em;
 			overflow-x: hidden;
 			overflow-y: auto;
 			position: relative;
+		}
+
+		.hidden-container-wrapper {
+			margin-top: 0em;
+			height: 0em;
 		}
 
 		.list-container {
@@ -111,20 +125,20 @@
 			height: 0px;
 		}
 
-		.undone-list, .done-list {
+		.task-list {
 			height: calc(100% - 6.5em);
 			padding: 1.25em;
 			overflow-x: hidden;
 			overflow-y: auto;
-			border: 1px solid;
 		}
 
-		.delete-task-button {
+		.list-container-bottom-button {
+			width: 100%;
+			height: 3em;
+			font-size: 1.25em;
 			border: 1px solid lime;
 			border-radius: 5em;
 			padding: 0.5em;
-			font-size: 1.25em;
-			width: 100%;
 		}
 
 		.delete-task-button:hover {
@@ -135,7 +149,20 @@
 			font-size: 1.25em;
 			border: 1px solid lime;
 			border-radius: 5em;
-			padding: 0.5em;
+			padding: 0.5em 1em;
+			user-select: none;
+			transition-property: all;
+			transition-duration: 0.5s;
+		}
+
+		.task:hover {
+			background-color: #00ff007f;
+		}
+
+		.task-name {
+			background-color: #efefefaf;
+			border-radius: 1em;
+			color: #1f1f1f;
 		}
 
 		.task input[type=text] {
@@ -179,19 +206,6 @@
 			height: 2.5em;
 		}
 
-		.calender-controller-button {
-			width: 40%;
-			height: 100%;
-			background-color: #0000007f;
-			transition-property: all;
-			transition-duration: 0.5s;
-		}
-
-		.calender-controller-button:hover {
-			background-color: #00ff007f;
-			width: 50%;
-		}
-
 		table {
 			border-collapse: collapse;
 			border-spacing: 0;
@@ -209,6 +223,7 @@
 		th {
 			border: solid;
 			padding: 0.5em 0;
+			text-align: center;
 		}
 
 		td, th {
@@ -242,99 +257,150 @@
 			background-color: #0000007f;
 		} */
 
+		/* hover時に動いたり色が変わったりするスゲーやつ */
+		.animation-button-container {
+			display: flex;
+			justify-content: space-around;
+			user-select: none;
+			overflow: hidden;
+		}
+
+		.animation-button-container > button {
+			height: 100%;
+			width: 40%;
+			padding: 0 1em;
+			background-color: #0000007f;
+			transition-property: all;
+			transition-duration: 0.5s;
+		}
+
+		.animation-button-container > button:hover {
+			background-color: #00ff007f;
+			width: 50%;
+		}
+
 	</style>
 </head>
 <body>
 	<!-- <img th:src="@{/img/meshitero.jpg}" class="back-image"> -->
 	<img src="../static/img/forest.jpg" alt="森" class="back-image">
 	<div class="content-wrapper">
+
 		<header>
 			<h1>FetCH₂() TodoList</h1>
 		</header>
+
 		<main>
+
+			<div class="hidden">
+				<!-- 実際にth:eachを使ってtaskが入るところ -->
+				<ul id="actualUndoneList">
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="1" />
+						<input type="text" name="title" value="aiueo" />
+						<input type="datetime-local" name="time_limit" value="2024-07-10T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="1" />
+						<input type="text" name="title" value="sasisuseso" />
+						<input type="datetime-local" name="time_limit" value="2022-07-10T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="1" />
+						<input type="text" name="title" value="vimのプラグインのなんかよくわかんないバグ直す" />
+						<input type="datetime-local" name="time_limit" value="2022-07-11T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="1" />
+						<input type="text" name="title" value="VIMをマスターする" />
+						<input type="datetime-local" name="time_limit" value="2024-06-14T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+				</ul>
+				<!-- 実際にth:eachを使ってtaskが入るところ -->
+				<ul id="actualDoneList">
+					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
+						<input type="checkbox" name="done_flg" value="1" />
+						<input type="hidden" name="id" value="2" />
+						<input type="text" name="title" value="kakikukeko" style="text-decoration: line-through;"/>
+						<input type="datetime-local" name="time_limit" value="2024-08-10" />
+						<input type="submit" value="更新"/>
+					</li>
+					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
+						<input type="checkbox" name="done_flg" value="1" />
+						<input type="hidden" name="id" value="2" />
+						<input type="text" name="title" value="朝食を食べる" style="text-decoration: line-through;"/>
+						<input type="datetime-local" name="time_limit" value="2024-08-10" />
+						<input type="submit" value="更新"/>
+					</li>
+				</ul>
+			</div>
+
 			<div class="todo-container">
+
+				<div class="container-controller animation-button-container">
+					<button>未完了のタスクを表示</button>
+					<button>完了済みのタスクを表示</button>
+				</div>
+
 				<div class="container-wrapper">
 					<section class="list-container">
-						<h3>2024/07の未完了のマイタスク</h3>
-						<div class="undone-list" id="undoneList">
-							<form method="post" class="task" action="@{/update}">
-								<input type="checkbox" name="done_flg" value="0" />
-								<input type="hidden" name="id" value="1" />
-								<input type="text" name="title" value="aiueo" />
-								<input type="datetime-local" name="time_limit" value="2024-07-10T10:00" />
-								<input type="submit" value="更新"/>
-							</form>
-							<form method="post" class="task" action="@{/update}">
-								<input type="checkbox" name="done_flg" value="0" />
-								<input type="hidden" name="id" value="1" />
-								<input type="text" name="title" value="sasisuseso" />
-								<input type="datetime-local" name="time_limit" value="2022-07-10T10:00" />
-								<input type="submit" value="更新"/>
-							</form>
-							<form method="post" class="task" action="@{/update}">
-								<input type="checkbox" name="done_flg" value="0" />
-								<input type="hidden" name="id" value="1" />
-								<input type="text" name="title" value="vimの拡張機能のなんかよくわかんないバグ直す" />
-								<input type="datetime-local" name="time_limit" value="2022-07-11T10:00" />
-								<input type="submit" value="更新"/>
-							</form>
-							<form method="post" class="task" action="@{/update}">
-								<input type="checkbox" name="done_flg" value="0" />
-								<input type="hidden" name="id" value="1" />
-								<input type="text" name="title" value="VIMをマスターする" />
-								<input type="datetime-local" name="time_limit" value="2024-06-14T10:00" />
-								<input type="submit" value="更新"/>
-							</form>
+						<h3><span class="js-calender-date"></span>の未完了のマイタスク</h3>
+						<div class="task-list" id="undoneListDisplayer">
+							<div class="task">
+								<p class="task-name">Sample Task0000</p>
+								<p class="task-time-limit">Time Limit: 01/01 11:09</p>
+							</div>
+							<div class="task">
+								<p class="task-name">Sample Task0001</p>
+								<p class="task-time-limit">Time Limit: 06/01 14:15</p>
+							</div>
 						</div>
+						<button class="list-container-bottom-button">タスクを追加</button>
 					</section>
 				</div>
 
 				<div class="container-wrapper">
 					<section class="list-container">
-						<h3>完了済み</h3>
-						<div class="done-list" id="doneList">
-							<form method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
-								<input type="checkbox" name="done_flg" value="1" />
-								<input type="hidden" name="id" value="2" />
-								<input type="text" name="title" value="kakikukeko" style="text-decoration: line-through;"/>
-								<input type="datetime-local" name="time_limit" value="2024-08-10" />
-								<input type="submit" value="更新"/>
-							</form>
-							<form method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
-								<input type="checkbox" name="done_flg" value="1" />
-								<input type="hidden" name="id" value="2" />
-								<input type="text" name="title" value="朝食を食べる" style="text-decoration: line-through;"/>
-								<input type="datetime-local" name="time_limit" value="2024-08-10" />
-								<input type="submit" value="更新"/>
-							</form>
+						<h3><span class="js-calender-date"></span>の完了済みタスク</h3>
+						<div class="task-list" id="doneList">
+							<p class="task-not-found-message">Task Not Found 404</p>
 						</div>
 						<form method="post" th:action="@{/delete}">
-							<input type="submit" class="delete-task-button" value="完了済みを削除" />
+							<input type="submit" class="list-container-bottom-button" value="完了済みを削除" />
 						</form>
 					</section>
 				</div>
 
-				<section class="add-task-container">
+				<!-- <section class="add-task-container">
 					<h3>新しいタスクを追加</h3>
 					<form method="post" th:action="@{/add}">
 						<input type="text" name="title" />
 						<input type="datetime-local" name="time_limit" />
 						<input type="submit" name="追加" />
 					</form>
-				</section>
+				</section> -->
 			</div>
 
 			<div class="calender-sticky-parent">
 				<section class="calender-container">
-					<div class="calender-controller-button-container">
-						<button class="calender-controller-button" id="setCalenderLastMonth">先月</button>
-						<button class="calender-controller-button" id="setCalenderNextMonth">翌月</button>
+					<div class="calender-controller-button-container animation-button-container">
+						<button id="setCalenderLastMonth">先月</button>
+						<button id="setCalenderNextMonth">翌月</button>
 					</div>
 					<div id="dynamicCalender"></div>
 				</section>
 			</div>
 
 		</main>
+
 		<div class="popup-container">
 			<div class="popup-back"></div>
 			<div class="settings-container">
@@ -350,8 +416,18 @@
 	<p class="keikoku">これはサンプルファイルです。本番用ではありません</p>
 
 	<script>
-		const INPUT_VALUE_DATETIME_REGEX = /((\d{4})-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12]\d)|(?:3[01])))(?:T((?:[01]\d)|(?:2[0-3])):((?:[0-5]\d)))?/;
 
+		//childrenとかgetElementsByClassNameとかで返ってくるHTML要素の配列の子要素ごとに実行する関数
+		HTMLCollection.prototype.forEach = function(fn) {
+			for (let i = 0, l = this.length; i < l; i++) {
+				fn(this[i]);
+			}
+		};
+
+		// datetime-localのvalueの値（なんか頭痛が痛いみたいな）から年、月、日、時間、分をそれぞれ個別に取得できる正規表現
+		const DATETIME_LOCAL_REGEX = /((\d{4})-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12]\d)|(?:3[01])))(?:T((?:[01]\d)|(?:2[0-3])):((?:[0-5]\d)))?/;
+
+		// 引数dateの月のカレンダーのHTMLの生成する関数
 		function createCalenderHtml(date) {
 			const WEEK_STR_ARR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 			//一週間は何日あるかの定数
@@ -413,12 +489,45 @@
 			return calenderHtml;
 		}
 
+		// 引数dateでdynamicCalenderのinnerHTMLにカレンダーのHTMLを生成して代入する関数
 		function setCalenderHtml(date) {
 			const calenderHtml = createCalenderHtml(date);
 
 			document.getElementById("dynamicCalender").innerHTML = calenderHtml;
 		}
 
+		// calenderがボタンが押されたなどして更新したときに実行される関数
+		function onUpdateCalender() {
+			const undoneList = document.getElementById("undoneList");
+			const calenderDateTexts = document.getElementsByClassName("js-calender-date");
+
+			const calenderDate = calenderController.getCurrentDate();
+
+			// undoneList.children.forEach((e) => {
+			// 	const datetimeLocalValue = e.querySelector("input[type=datetime-local]").value;
+
+			// 	if (datetimeLocalValue) {
+			// 		const datetimeInfo = DATETIME_LOCAL_REGEX.exec(datetimeLocalValue);
+			// 		if (datetimeInfo) {
+			// 			const [_, date, year, month, day] = datetimeInfo.map(e => Number.parseInt(e));
+
+			// 			const currentYear = calenderDate.getFullYear();
+			// 			const currentMonth = calenderDate.getMonth() + 1;
+			// 			if (currentYear !== year || currentMonth !== month) {
+			// 				e.style.display = "none";
+			// 			} else {
+			// 				e.style.display = "block";
+			// 			}
+			// 		}
+			// 	}
+			// });
+
+			calenderDateTexts.forEach((e) => {
+				e.innerText = `${calenderDate.getFullYear()}/${calenderDate.getMonth() + 1}`;
+			});
+		}
+
+		// undoneList, doneListのtaskのdatetime-localの値を読み取り、calenderにそれぞれ色をつける関数
 		function markCalender() {
 			//document.getElementsByClassName("undoneList")[1].querySelector("input[name=time_limit]").value
 		}
@@ -426,54 +535,44 @@
 
 		class CalenderController {
 			constructor() {
-				const currentDate = this.currentDate = new Date();
+				//変数nowとメンバ変数nowとメンバ変数currentDateを同時に初期化
+				const now = this.now = this.currentDate = new Date();
 				this.monthOffset = 0;
-				setCalenderHtml(currentDate);
+				setCalenderHtml(now);
+			}
+
+			getCurrentDate() {
+				return this.currentDate;
 			}
 
 			setCalenderLastMonth() {
 				this.monthOffset--;
-				const year = this.currentDate.getFullYear();
-				const month = this.currentDate.getMonth();
-				setCalenderHtml(new Date(year, month + this.monthOffset));
+				const year = this.now.getFullYear();
+				const month = this.now.getMonth();
+				const currentDate = this.currentDate = new Date(year, month + this.monthOffset);
+				setCalenderHtml(currentDate);
 			}
 
 			setCalenderNextMonth() {
 				this.monthOffset++;
-				const year = this.currentDate.getFullYear();
-				const month = this.currentDate.getMonth();
-				setCalenderHtml(new Date(year, month + this.monthOffset));
+				const year = this.now.getFullYear();
+				const month = this.now.getMonth();
+				const currentDate = this.currentDate = new Date(year, month + this.monthOffset);
+				setCalenderHtml(currentDate);
 			}
 		}
 		const calenderController = new CalenderController();
 
 		document.getElementById("setCalenderLastMonth").addEventListener("click", (e) => {
 			calenderController.setCalenderLastMonth();
+			onUpdateCalender();
 		});
 		document.getElementById("setCalenderNextMonth").addEventListener("click", (e) => {
 			calenderController.setCalenderNextMonth();
+			onUpdateCalender();
 		});
 
-		const undoneList = document.getElementById("undoneList");
-
-		Array.prototype.forEach.call(undoneList.children, (e) => {
-			const datetimeLocalValue = e.querySelector("input[type=datetime-local]").value;
-
-			if (datetimeLocalValue) {
-				const datetimeInfo = INPUT_VALUE_DATETIME_REGEX.exec(datetimeLocalValue);
-				if (datetimeInfo) {
-					const [_, date, year, month, day] = datetimeInfo.map(e => Number.parseInt(e));
-
-					const currentYear = calenderController.currentDate.getFullYear();
-					const currentMonth = calenderController.currentDate.getMonth() + 1;
-					if (currentYear !== year || currentMonth !== month) {
-						console.log("condition: false");
-						e.style.display = "none";
-					}
-				}
-			}
-		});
-		
+		onUpdateCalender();
 	</script>
 </body>
 </html>
