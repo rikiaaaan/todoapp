@@ -167,7 +167,7 @@
 		}
 
 		.task-not-found-message {
-			font-size: 2em;
+			font-size: 1.5em;
 		}
 
 		.add-task-container {
@@ -304,12 +304,14 @@
 			font-size: 1.5em;
 		}
 
-		.popup-form > div:not(:first-child) {
-			margin-top: 1.5em;
+		.popup-form-item {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
 		}
 
-		.popup-form > div {
-			width: 100%;
+		.popup-form > div:not(:first-child) {
+			margin-top: 1.5em;
 		}
 
 		.popup-form label {
@@ -320,7 +322,7 @@
 			color: white;
 			padding: 1.5rem;
 			border-radius: 50px;
-			width: 6em;
+			width: 100%;
 		}
 
 		.popup-form input[type=checkbox]:not(:checked) {
@@ -332,11 +334,13 @@
 		}
 
 		.popup-form input[type=checkbox]:not(:checked)::before {
-			content: "未完了";
+			content: "未完了...";
+			font-size: 1.25em;
 		} 
 
 		.popup-form input[type=checkbox]:checked::before {
-			content: "完了";
+			content: "完了!!!";
+			font-size: 1.25em;
 		} 
 
 		.popup-form input[type=submit] {
@@ -394,6 +398,27 @@
 					</form>
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="56" />
+						<input type="text" name="title" value="kakikukeko" />
+						<input type="datetime-local" name="time_limit" value="2024-07-14T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="72" />
+						<input type="text" name="title" value="sashisuseso" />
+						<input type="datetime-local" name="time_limit" value="2024-07-21T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
+						<input type="hidden" name="id" value="81" />
+						<input type="text" name="title" value="tachitsuteto" />
+						<input type="datetime-local" name="time_limit" value="2024-07-23T10:00" />
+						<input type="submit" value="更新"/>
+					</form>
+					<form method="post" class="task" action="@{/update}">
+						<input type="checkbox" name="done_flg" value="0" />
 						<input type="hidden" name="id" value="2" />
 						<input type="text" name="title" value="sasisuseso" />
 						<input type="datetime-local" name="time_limit" value="2022-07-10T10:00" />
@@ -402,14 +427,14 @@
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
 						<input type="hidden" name="id" value="3" />
-						<input type="text" name="title" value="vimのプラグインのなんかよくわかんないバグ直す" />
-						<input type="datetime-local" name="time_limit" value="2022-07-11T10:00" />
+						<input type="text" name="title" value="逆立ちで世界一周旅行をする" />
+						<input type="datetime-local" name="time_limit" value="2024-09-11T20:00" />
 						<input type="submit" value="更新"/>
 					</form>
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
-						<input type="hidden" name="id" value="114514" />
-						<input type="text" name="title" value="VIMをマスターする" />
+						<input type="hidden" name="id" value="12" />
+						<input type="text" name="title" value="昼食を食べる" />
 						<input type="datetime-local" name="time_limit" value="2024-06-14T10:00" />
 						<input type="submit" value="更新"/>
 					</form>
@@ -421,6 +446,20 @@
 						<input type="hidden" name="id" value="5" />
 						<input type="text" name="title" value="kakikukeko" style="text-decoration: line-through;"/>
 						<input type="datetime-local" name="time_limit" value="2024-08-10T10:10" />
+						<input type="submit" value="更新"/>
+					</li>
+					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
+						<input type="checkbox" name="done_flg" value="1" />
+						<input type="hidden" name="id" value="9" />
+						<input type="text" name="title" value="aaaaaaaaaaaaaaaaaaaaa" style="text-decoration: line-through;"/>
+						<input type="datetime-local" name="time_limit" value="2024-07-20T10:10" />
+						<input type="submit" value="更新"/>
+					</li>
+					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
+						<input type="checkbox" name="done_flg" value="1" />
+						<input type="hidden" name="id" value="6" />
+						<input type="text" name="title" value="aaaaaaaaaaaaaaaaaaaaa" style="text-decoration: line-through;"/>
+						<input type="datetime-local" name="time_limit" value="2024-07-27T10:10" />
 						<input type="submit" value="更新"/>
 					</li>
 					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
@@ -444,16 +483,9 @@
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の未完了のマイタスク</h3>
 						<ul class="task-list" id="undoneListDisplayer">
-							<li class="task">
-								<p class="task-name">Sample Task0000</p>
-								<p class="task-time-limit">Time Limit: 01/01 11:09</p>
-							</li>
-							<li class="task">
-								<p class="task-name">Sample Task0001</p>
-								<p class="task-time-limit">Time Limit: 06/01 14:15</p>
-							</li>
+
 						</ul>
-						<button class="list-container-bottom-button">タスクを追加</button>
+						<button class="list-container-bottom-button" id="addTaskButton">タスクを追加</button>
 					</section>
 				</div>
 
@@ -461,7 +493,7 @@
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の完了済みタスク</h3>
 						<ul class="task-list" id="doneListDisplayer">
-							<p class="task-not-found-message">Task Not Found 404</p>
+
 						</ul>
 						<form method="post" th:action="@{/delete}">
 							<input type="submit" class="list-container-bottom-button" value="完了済みを削除" />
@@ -530,8 +562,12 @@
 			}
 		};
 
-		// 【見てごらん】datetime-localのvalueから年、月、日、時間、分をそれぞれ個別に取得できる正規表現の強点
+		// 【見てごらん】datetime-localのvalueから年、月、日、時間、分とかをそれぞれ個別に取得できる正規表現の強点
 		const DATETIME_LOCAL_REGEX = /((\d{4})-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12]\d)|(?:3[01])))(?:T((?:[01]\d)|(?:2[0-3])):((?:[0-5]\d)))?/;
+
+		function zeroPadding(n) {
+			return (n < 10 ? "0" : "") + n;
+		}
 
 		// 引数dateの月のカレンダーのHTMLの生成する関数
 		function createCalenderHtml(date) {
@@ -585,7 +621,7 @@
 						calenderHtml += `<td class="is-disabled">${num}</td>`;
 						dayCount++;
 					} else {
-						calenderHtml += `<td data-date="${currentYear}_${currentMonth}_${dayCount}">${dayCount}</td>`;
+						calenderHtml += `<td data-date="${currentYear}-${zeroPadding(currentMonth)}-${zeroPadding(dayCount)}">${dayCount}</td>`;
 						dayCount++;
 					}
 				}
@@ -595,21 +631,17 @@
 			return calenderHtml;
 		}
 
-		// 引数dateでdynamicCalenderのinnerHTMLにカレンダーのHTMLを生成して代入する関数
-		function setCalenderHtml(date) {
-			const calenderHtml = createCalenderHtml(date);
-
-			document.getElementById("dynamicCalender").innerHTML = calenderHtml;
-		}
-
 		// calenderがボタンが押されたなどして更新されたときに実行される関数
 		function onUpdateCalender() {
 			const undoneList = document.getElementById("undoneList");
 
 			const calenderDate = calenderController.getCurrentDate();
 
-			buildUndoneTaskList(calenderDate);
+			// ******** めっちゃ重要ポイント **********
+			// UndoneListよりも先にDoneListを組み立てる（？）ことによりUndoneListのカレンダーの色付けを優先的にできる
+			// **************************************
 			buildDoneTaskList(calenderDate);
+			buildUndoneTaskList(calenderDate);
 
 			document.getElementsByClassName("js-calender-date").forEach((e) => {
 				e.innerText = `${calenderDate.getFullYear()}/${calenderDate.getMonth() + 1}`;
@@ -617,13 +649,28 @@
 		}
 
 		// undoneList, doneListのtaskのdatetime-localの値を読み取り、calenderにそれぞれ色をつける関数
-		// dateStr: "YYYY-MM-DDTHH:MI"
-		function markCalender(dateStr) {
-			//document.getElementsByClassName("undoneList")[1].querySelector("input[name=time_limit]").value
-		}
+		// dateStr: "YYYY-MM-DD"
+		// markType: 0: Undone, 1: Done
+		function markCalender(dateStr, markType) {
+			const calenderDate = document.getElementById("dynamicCalender").querySelector(`td[data-date='${dateStr}']`);
 
-		function zeroPadding(n) {
-			return (n < 10 ? "0" : "") + n;
+			if (calenderDate) {
+				switch (markType) {
+					//Undone
+					case 0: {
+						calenderDate.style.backgroundColor = "#ee00007f";
+						break;
+					}
+
+					//Done
+					case 1: {
+						calenderDate.style.backgroundColor = "#00ff007f";
+						break;
+					}
+
+					default: break;
+				}
+			}
 		}
 
 		// actualUndoneListからundoneTaskListを組み立てる関数
@@ -639,7 +686,7 @@
 				const doneFlg = child.querySelector("input[name=done_flg]").value;
 				const taskId = child.querySelector("input[name=id]").value;
 				
-				const [matched, _, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
+				const [matched, matchedDate, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
 					return /^\d+$/.test(e) ? Number.parseInt(e) : e;
 				});
 
@@ -648,11 +695,14 @@
 					undoneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
 					undoneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
 					undoneListHtml += `</li>`;
+
+					// matchedDateでundoneでカラー染める（？）
+					markCalender(matchedDate, 0);
 				}
 			});
 
 			if (undoneListHtml === "") {
-				undoneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
+				undoneListHtml= `<p class="task-not-found-message">現在タスクは登録されていません<br>今月は自由です！</p>`;
 			}
 
 			undoneListDisplayer.innerHTML = undoneListHtml;
@@ -678,7 +728,7 @@
 				const doneFlg = child.querySelector("input[name=done_flg]").value;
 				const taskId = child.querySelector("input[name=id]").value;
 				
-				const [matched, _, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
+				const [matched, matchedDate, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
 					return /^\d+$/.test(e) ? Number.parseInt(e) : e;
 				});
 
@@ -687,11 +737,14 @@
 					doneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
 					doneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
 					doneListHtml += `</li>`;
+
+					// matchedDateでdoneでカラー染める（？）
+					markCalender(matchedDate, 1);
 				}
 			});
 
 			if (doneListHtml === "") {
-				doneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
+				doneListHtml = `<p class="task-not-found-message">現在完了済みのタスクはありません<br>タスクを達成してから遊びましょう！</p>`;
 			}
 
 			doneListDisplayer.innerHTML = doneListHtml;
@@ -709,7 +762,8 @@
 				//変数nowとメンバ変数nowとメンバ変数currentDateを同時に初期化
 				const now = this.now = this.currentDate = new Date();
 				this.monthOffset = 0;
-				setCalenderHtml(now);
+
+				document.getElementById("dynamicCalender").innerHTML = createCalenderHtml(now);
 			}
 
 			// メンバ変数currentDateをそのまま返す
@@ -723,7 +777,8 @@
 				const year = this.now.getFullYear();
 				const month = this.now.getMonth();
 				const currentDate = this.currentDate = new Date(year, month + this.monthOffset);
-				setCalenderHtml(currentDate);
+
+				document.getElementById("dynamicCalender").innerHTML = createCalenderHtml(currentDate);
 			}
 
 			// カレンダーを減在の一か月後にセットする
@@ -732,7 +787,8 @@
 				const year = this.now.getFullYear();
 				const month = this.now.getMonth();
 				const currentDate = this.currentDate = new Date(year, month + this.monthOffset);
-				setCalenderHtml(currentDate);
+
+				document.getElementById("dynamicCalender").innerHTML = createCalenderHtml(currentDate);
 			}
 		}
 
@@ -865,6 +921,26 @@
 			showAddTaskPopup() {
 				if (this.state === 0) {
 					this.popupContainer.style.display = "block";
+
+					document.getElementById("popupForm").innerHTML = `
+						<div class="popup-form-item">
+							<h3>タスクの名前</h3>
+							<input type="text" name="title" placeholder="タスクの名前" required />
+						</div>
+
+						<div class="popup-form-item">
+							<h3>タスクをいつまでに終わらせるか</h3>
+							<small>カレンダーのアイコンをクリックして詳細に編集します</small>
+							<input type="datetime-local" name="time_limit" required />
+						</div>
+
+						<div class="popup-form-item">
+							<input type="submit" value="追加" />
+						</div>
+					`;
+
+					document.getElementById("popupTitle").innerText = "タスクを追加";
+
 					this.state = 3;
 				}
 			}
@@ -876,18 +952,22 @@
 		const popupController = new PopupController();
 
 		// それぞれのボタンにcontrollerのメソッドを呼び出すイベントを追加
-		document.getElementById("showUndoneList").addEventListener("click", (e) => {
+		document.getElementById("showUndoneList").addEventListener("click", (_e) => {
 			containerWrapperController.showUndoneList();
 		});
-		document.getElementById("showDoneList").addEventListener("click", (e) => {
+		document.getElementById("showDoneList").addEventListener("click", (_e) => {
 			containerWrapperController.showDoneList();
 		});
 
-		document.getElementById("setCalenderLastMonth").addEventListener("click", (e) => {
+		document.getElementById("addTaskButton").addEventListener("click", (_e) => {
+			popupController.showAddTaskPopup();
+		});
+
+		document.getElementById("setCalenderLastMonth").addEventListener("click", (_e) => {
 			calenderController.setCalenderLastMonth();
 			onUpdateCalender();
 		});
-		document.getElementById("setCalenderNextMonth").addEventListener("click", (e) => {
+		document.getElementById("setCalenderNextMonth").addEventListener("click", (_e) => {
 			calenderController.setCalenderNextMonth();
 			onUpdateCalender();
 		});
