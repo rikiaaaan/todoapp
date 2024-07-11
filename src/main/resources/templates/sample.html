@@ -702,45 +702,7 @@
 					popupController.showUpdateTaskPopup(ev.currentTarget);
 				});
 			});
-			// const actualDoneList = document.getElementById("actualDoneList");
-			// const doneListDisplayer = document.getElementById("doneListDisplayer");
-
-			// let doneListHtml = "";
-			
-			// actualDoneList.children.forEach((child) => {
-			// 	const taskName = child.querySelector("input[name=title]").value;
-			// 	const timeLimit = child.querySelector("input[name=time_limit]").value;
-			// 	const doneFlg = child.querySelector("input[name=done_flg]").value;
-			// 	const taskId = child.querySelector("input[name=id]").value;
-				
-			// 	const [_, __, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map(e => Number.parseInt(e));
-
-			// 	if (year === date.getFullYear() && month === (date.getMonth() + 1)) {
-			// 		doneListHtml += `<li class="task" data-id="${taskId}" data-doneFlg="${doneFlg}">`;
-			// 		doneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
-			// 		doneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
-			// 		doneListHtml += `</li>`;
-			// 	}
-			// });
-
-			// if (doneListHtml === "") {
-			// 	doneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
-			// }
-
-			// doneListDisplayer.innerHTML = doneListHtml;
-
-			// doneListDisplayer.children.forEach((task) => {
-			// 	task.addEventListener("click", (ev) => {
-			// 		// currenttargetでevent発生元の要素を取得できるらしい
-			// 		popupController.showUpdateTaskPopup(ev.currentTarget);
-			// 	});
-			// });
 		}
-
-		// 引数taskでupdateTaskPopupを組み立てる関数
-		function buildUpdateTaskPopup(task) {
-		}
-
 
 		class CalenderController {
 			constructor() {
@@ -865,12 +827,31 @@
 						const taskTitle = task.getElementsByClassName("task-title")[0].innerHTML;
 						const taskTimeLimit = task.dataset.fulltimelimit;
 
-						popupForm.querySelector("input[name=id]").value = taskId;
-						//test
-						popupForm.querySelector("input[name=done_flg]").checked = Boolean(Number.parseInt(taskDoneFlg));
-						popupForm.querySelector("input[name=done_flg]").value = taskDoneFlg;
-						popupForm.querySelector("input[name=title]").value = taskTitle;
-						popupForm.querySelector("input[name=time_limit]").value = taskTimeLimit;
+						let popupFormHtml = "";
+
+						popupFormHtml = `
+							<input type="hidden" name="id" value="${taskId}">
+							<div class="popup-form-item">
+								<h3>タスクの名前</h3>
+								<input type="text" name="title" placeholder="タスクの名前" value="${taskTitle}" required />
+							</div>
+							<div class="popup-form-item">
+								<label for="done_flg">タスクが終わったかどうか</label>
+								<input type="checkbox" name="done_flg" id="done_flg" ${Number.parseInt(taskDoneFlg) === 1 ? "checked" : ""} value="${taskDoneFlg}" id="popupFormDoneFlgCheckbox" onchange="this.value=this.checked?'1':'0'"/>
+							</div>
+
+							<div class="popup-form-item">
+								<h3>タスクをいつまでに終わらせるか</h3>
+								<small>カレンダーのアイコンをクリックして詳細に編集します</small>
+								<input type="datetime-local" name="time_limit" value="${taskTimeLimit}" required />
+							</div>
+
+							<div class="popup-form-item">
+								<input type="submit" value="更新" />
+							</div>
+						`;
+
+						popupForm.innerHTML = popupFormHtml;
 
 						document.getElementById("popupTitle").innerText = "タスクを編集";
 						
