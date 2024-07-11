@@ -1,1 +1,364 @@
 @charset "UTF-8";
+
+body {
+    text-align: center;
+    color: #efefef;
+    background-color: #1f1f1f;
+    height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    user-select: none;
+}
+
+.content-wrapper {
+    opacity: 0;
+    animation-name: anim-main;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes anim-main {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.back-image {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+header {
+    height: 3em;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h1, h3 {
+    text-decoration: underline;
+}
+
+main {
+    padding: 1.25em 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+section {
+    padding: 1.2em;
+    border-radius: 1em;
+    border: lime solid 0.5em;
+}
+
+section > :not(:first-child),
+.task-list > :not(:first-child) {
+    margin-top: 0.5em;
+}
+
+.todo-container {
+    width: 40%;
+}
+
+.todo-container > div {
+    transition-property: all;
+    transition-duration: 1s;
+}
+
+.todo-container > section {
+    width: 100%;
+}
+
+.todo-container > :not(:first-child) {
+    margin-top: 2em;
+}
+
+.container-controller {
+    height: 3em;
+    border: 0.25em solid lime;
+    border-radius: 1.2em;
+}
+
+.container-wrapper {
+    height: 40em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+
+.hidden-container-wrapper {
+    margin-top: 0em !important;
+    height: 0em !important;
+}
+
+.list-container {
+    height: 100%;
+}
+
+.hidden-list-container {
+    height: 0px;
+}
+
+.task-list {
+    height: calc(100% - 6.5em);
+    padding: 1.25em;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.list-container-bottom-button {
+    width: 100%;
+    height: 3em;
+    font-size: 1.25em;
+    border: 1px solid lime;
+    border-radius: 5em;
+    padding: 0.5em;
+}
+
+.delete-task-button:hover {
+    background-color: #00ff002f;
+}
+
+.task {
+    font-size: 1.25em;
+    border: 1px solid lime;
+    border-radius: 5em;
+    padding: 0.5em 1em;
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.task:hover {
+    background-color: #00ff007f;
+}
+
+.task-title {
+    background-color: #efefefaf;
+    border-radius: 1em;
+    color: #1f1f1f;
+}
+
+.task-not-found-message {
+    font-size: 1.5em;
+}
+
+.add-task-container {
+    height: 8em;
+    margin-top: 2em;
+}
+
+.keikoku {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    text-decoration: underline;
+    font-weight: bolder;
+}
+
+.calender-sticky-parent {
+    width: 40%;
+    height: 100%;
+}
+
+.calender-container {
+    position: sticky;
+    top: 5em;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.calender-controller-button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 2.5em;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 80%;
+    margin: 0 auto;
+}
+
+td {
+    font-size: 2em;
+    padding: 0.25em;
+    border: solid;
+}
+
+th {
+    border: solid;
+    padding: 0.5em 0;
+    text-align: center;
+}
+
+td, th {
+    border-color: white;
+}
+
+th:first-child, td:first-child {
+    color: red;
+}
+
+th:last-child, td:last-child {
+    color: aqua;
+}
+
+td.is-disabled {
+    color: #6f6f6f;
+}
+
+.popup-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.popup-back {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #000000bf;
+}
+
+.todo-add-popup-container {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 40em;
+    height: 50em;
+    margin: 2em auto 0 auto;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-title {
+    font-size: 2em;
+    text-decoration: underline;
+    background-color: #003300;
+    padding: 0.45em 2em;
+    border: 0.2em solid lime;
+    border-radius: 0.5em;
+}
+
+.popup-form {
+    width: 40rem;
+    height: 40em;
+    background-color: #003300;
+    border: 0.5em solid lime;
+    border-radius: 5%;
+    margin-top: 3em;
+    padding: 1.5rem;
+    font-size: 1.25em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-form input[type=text],
+.popup-form input[type=datetime-local] {
+    background-color: #efefef;
+    color: #1f1f1f;
+    padding: 0.5rem 0;
+    font-size: 1.5em;
+}
+
+.popup-form-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-form > div:not(:first-child) {
+    margin-top: 1.5em;
+}
+
+.popup-form label {
+    text-decoration: underline;
+}
+
+.popup-form input[type=checkbox] {
+    color: white;
+    padding: 1.5rem;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.popup-form input[type=checkbox]:not(:checked) {
+    background-color: #ff00007f;
+}
+
+.popup-form input[type=checkbox]:checked {
+    background-color: #00ff007f;
+}
+
+.popup-form input[type=checkbox]:not(:checked)::before {
+    content: "未完了...";
+    font-size: 1.25em;
+} 
+
+.popup-form input[type=checkbox]:checked::before {
+    content: "完了!!!";
+    font-size: 1.25em;
+} 
+
+.popup-form input[type=submit] {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid lime;
+    border-radius: 2em;
+    font-size: 1.2em;
+}
+
+/* hover時に動いたり色が変わったりするスゲーやつ */
+.animation-button-container {
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+}
+
+.animation-button-container > button {
+    height: 100%;
+    width: 40%;
+    padding: 0 1em;
+    background-color: #0000007f;
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.animation-button-container > button:hover {
+    background-color: #00ff007f;
+    width: 50%;
+}

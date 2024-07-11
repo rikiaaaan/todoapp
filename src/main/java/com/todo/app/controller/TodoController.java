@@ -44,8 +44,18 @@ public class TodoController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping(value="/destyle.css")
+	public String destyle() {
+		return "destyle.css";
+	}
+
 	@RequestMapping(value="/style.css")
 	public String style() {
 		return "style.css";
+	}
+
+	@RequestMapping(value="/script.js")
+	public String script() {
+		return "script.js";
 	}
 }
