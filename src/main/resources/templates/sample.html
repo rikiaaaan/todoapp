@@ -21,7 +21,7 @@
 		.content-wrapper {
 			opacity: 0;
 			animation-name: anim-main;
-			animation-duration: 4s;
+			animation-duration: 3s;
 			animation-fill-mode: forwards;
 		}
 
@@ -69,6 +69,7 @@
 			padding: 1.25em 0;
 			display: flex;
 			justify-content: space-evenly;
+			align-items: center;
 		}
 
 		section {
@@ -113,8 +114,8 @@
 		}
 
 		.hidden-container-wrapper {
-			margin-top: 0em;
-			height: 0em;
+			margin-top: 0em !important;
+			height: 0em !important;
 		}
 
 		.list-container {
@@ -159,19 +160,14 @@
 			background-color: #00ff007f;
 		}
 
-		.task-name {
+		.task-title {
 			background-color: #efefefaf;
 			border-radius: 1em;
 			color: #1f1f1f;
 		}
 
-		.task input[type=text] {
-			background-color: #0000006f;
-		}
-
-		.task input[type=checkbox] {
-			width: 1.5em;
-			height: 1.5em;
+		.task-not-found-message {
+			font-size: 2em;
 		}
 
 		.add-task-container {
@@ -242,9 +238,13 @@
 			color: #6f6f6f;
 		}
 
-
-		/* .popup-container {
-		
+		.popup-container {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
 		}
 
 		.popup-back {
@@ -254,8 +254,98 @@
 			width: 100%;
 			height: 100%;
 			z-index: 10;
-			background-color: #0000007f;
-		} */
+			background-color: #000000bf;
+		}
+
+		.todo-add-popup-container {
+			position: relative;
+			left: 0;
+			top: 0;
+			width: 40em;
+			height: 50em;
+			margin: 2em auto 0 auto;
+			z-index: 10;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.popup-title {
+			font-size: 2em;
+			text-decoration: underline;
+			background-color: #003300;
+			padding: 0.45em 2em;
+			border: 0.2em solid lime;
+			border-radius: 0.5em;
+		}
+
+		.popup-form {
+			width: 40rem;
+			height: 40em;
+			background-color: #003300;
+			border: 0.5em solid lime;
+			border-radius: 5%;
+			margin-top: 3em;
+			padding: 1.5rem;
+			font-size: 1.25em;
+
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.popup-form input[type=text],
+		.popup-form input[type=datetime-local] {
+			background-color: #efefef;
+			color: #1f1f1f;
+			padding: 0.5rem 0;
+			font-size: 1.5em;
+		}
+
+		.popup-form > div:not(:first-child) {
+			margin-top: 1.5em;
+		}
+
+		.popup-form > div {
+			width: 100%;
+		}
+
+		.popup-form label {
+			text-decoration: underline;
+		}
+
+		.popup-form input[type=checkbox] {
+			color: white;
+			padding: 1.5rem;
+			border-radius: 50px;
+			width: 6em;
+		}
+
+		.popup-form input[type=checkbox]:not(:checked) {
+			background-color: #ff00007f;
+		}
+
+		.popup-form input[type=checkbox]:checked {
+			background-color: #00ff007f;
+		}
+
+		.popup-form input[type=checkbox]:not(:checked)::before {
+			content: "未完了";
+		} 
+
+		.popup-form input[type=checkbox]:checked::before {
+			content: "完了";
+		} 
+
+		.popup-form input[type=submit] {
+			width: 100%;
+			padding: 1rem;
+			border: 1px solid lime;
+			border-radius: 2em;
+			font-size: 1.2em;
+		}
 
 		/* hover時に動いたり色が変わったりするスゲーやつ */
 		.animation-button-container {
@@ -304,21 +394,21 @@
 					</form>
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
-						<input type="hidden" name="id" value="1" />
+						<input type="hidden" name="id" value="2" />
 						<input type="text" name="title" value="sasisuseso" />
 						<input type="datetime-local" name="time_limit" value="2022-07-10T10:00" />
 						<input type="submit" value="更新"/>
 					</form>
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
-						<input type="hidden" name="id" value="1" />
+						<input type="hidden" name="id" value="3" />
 						<input type="text" name="title" value="vimのプラグインのなんかよくわかんないバグ直す" />
 						<input type="datetime-local" name="time_limit" value="2022-07-11T10:00" />
 						<input type="submit" value="更新"/>
 					</form>
 					<form method="post" class="task" action="@{/update}">
 						<input type="checkbox" name="done_flg" value="0" />
-						<input type="hidden" name="id" value="1" />
+						<input type="hidden" name="id" value="114514" />
 						<input type="text" name="title" value="VIMをマスターする" />
 						<input type="datetime-local" name="time_limit" value="2024-06-14T10:00" />
 						<input type="submit" value="更新"/>
@@ -328,16 +418,16 @@
 				<ul id="actualDoneList">
 					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
 						<input type="checkbox" name="done_flg" value="1" />
-						<input type="hidden" name="id" value="2" />
+						<input type="hidden" name="id" value="5" />
 						<input type="text" name="title" value="kakikukeko" style="text-decoration: line-through;"/>
-						<input type="datetime-local" name="time_limit" value="2024-08-10" />
+						<input type="datetime-local" name="time_limit" value="2024-08-10T10:10" />
 						<input type="submit" value="更新"/>
 					</li>
 					<li method="post" class="task" th:action="@{/update}" th:each="todo : ${doneTodos}">
 						<input type="checkbox" name="done_flg" value="1" />
-						<input type="hidden" name="id" value="2" />
+						<input type="hidden" name="id" value="7" />
 						<input type="text" name="title" value="朝食を食べる" style="text-decoration: line-through;"/>
-						<input type="datetime-local" name="time_limit" value="2024-08-10" />
+						<input type="datetime-local" name="time_limit" value="2024-08-10T19:12" />
 						<input type="submit" value="更新"/>
 					</li>
 				</ul>
@@ -353,16 +443,16 @@
 				<div class="container-wrapper" id="undoneWrapper">
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の未完了のマイタスク</h3>
-						<div class="task-list" id="undoneListDisplayer">
-							<div class="task">
+						<ul class="task-list" id="undoneListDisplayer">
+							<li class="task">
 								<p class="task-name">Sample Task0000</p>
 								<p class="task-time-limit">Time Limit: 01/01 11:09</p>
-							</div>
-							<div class="task">
+							</li>
+							<li class="task">
 								<p class="task-name">Sample Task0001</p>
 								<p class="task-time-limit">Time Limit: 06/01 14:15</p>
-							</div>
-						</div>
+							</li>
+						</ul>
 						<button class="list-container-bottom-button">タスクを追加</button>
 					</section>
 				</div>
@@ -370,23 +460,15 @@
 				<div class="container-wrapper" id="doneWrapper">
 					<section class="list-container">
 						<h3><span class="js-calender-date"></span>の完了済みタスク</h3>
-						<div class="task-list" id="doneList">
+						<ul class="task-list" id="doneListDisplayer">
 							<p class="task-not-found-message">Task Not Found 404</p>
-						</div>
+						</ul>
 						<form method="post" th:action="@{/delete}">
 							<input type="submit" class="list-container-bottom-button" value="完了済みを削除" />
 						</form>
 					</section>
 				</div>
 
-				<!-- <section class="add-task-container">
-					<h3>新しいタスクを追加</h3>
-					<form method="post" th:action="@{/add}">
-						<input type="text" name="title" />
-						<input type="datetime-local" name="time_limit" />
-						<input type="submit" name="追加" />
-					</form>
-				</section> -->
 			</div>
 
 			<div class="calender-sticky-parent">
@@ -401,14 +483,38 @@
 
 		</main>
 
-		<div class="popup-container">
-			<div class="popup-back"></div>
-			<div class="settings-container">
+		<div class="popup-container" id="popupContainer">
+			<div class="popup-back" id="popupBack"></div>
+			<div class="settings-container" id="settingsPopup">
 				<div class="settings-item"></div>
 				<div class="settings-item"></div>
 			</div>
-			<div class="todo-update-ui-container">
-				<form action="" method="post"></form>
+			<div class="todo-add-popup-container" id="todoPopup">
+				<h2 class="popup-title" id="popupTitle">タスクを追加</h2>
+				<form action="" method="post" class="popup-form" id="popupForm">
+					<div>
+						<h3>タスクの名前</h3>
+						<input type="text" name="title" placeholder="タスクの名前" required />
+					</div>
+
+					<div>
+						<label for="done_flg">タスクが終わったかどうか</label>
+						<br>
+						<input type="checkbox" name="done_flg" id="done_flg"/>
+					</div>
+
+					<div>
+						<h3>タスクをいつまでに終わらせるか</h3>
+						<small>カレンダーのアイコンをクリックして詳細に編集します</small>
+						<input type="datetime-local" name="time_limit" required />
+					</div>
+
+					<div>
+						<input type="submit" value="更新">
+					</div>
+
+					<input type="hidden" name="id" />
+				</form>
 			</div>
 		</div>
 	</div>
@@ -424,7 +530,7 @@
 			}
 		};
 
-		// datetime-localのvalueの値（なんか頭痛が痛いみたいな）から年、月、日、時間、分をそれぞれ個別に取得できる正規表現
+		// 【見てごらん】datetime-localのvalueから年、月、日、時間、分をそれぞれ個別に取得できる正規表現の強点
 		const DATETIME_LOCAL_REGEX = /((\d{4})-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12]\d)|(?:3[01])))(?:T((?:[01]\d)|(?:2[0-3])):((?:[0-5]\d)))?/;
 
 		// 引数dateの月のカレンダーのHTMLの生成する関数
@@ -496,40 +602,143 @@
 			document.getElementById("dynamicCalender").innerHTML = calenderHtml;
 		}
 
-		// calenderがボタンが押されたなどして更新したときに実行される関数
+		// calenderがボタンが押されたなどして更新されたときに実行される関数
 		function onUpdateCalender() {
 			const undoneList = document.getElementById("undoneList");
-			const calenderDateTexts = document.getElementsByClassName("js-calender-date");
 
 			const calenderDate = calenderController.getCurrentDate();
 
-			// undoneList.children.forEach((e) => {
-			// 	const datetimeLocalValue = e.querySelector("input[type=datetime-local]").value;
+			buildUndoneTaskList(calenderDate);
+			buildDoneTaskList(calenderDate);
 
-			// 	if (datetimeLocalValue) {
-			// 		const datetimeInfo = DATETIME_LOCAL_REGEX.exec(datetimeLocalValue);
-			// 		if (datetimeInfo) {
-			// 			const [_, date, year, month, day] = datetimeInfo.map(e => Number.parseInt(e));
-
-			// 			const currentYear = calenderDate.getFullYear();
-			// 			const currentMonth = calenderDate.getMonth() + 1;
-			// 			if (currentYear !== year || currentMonth !== month) {
-			// 				e.style.display = "none";
-			// 			} else {
-			// 				e.style.display = "block";
-			// 			}
-			// 		}
-			// 	}
-			// });
-
-			calenderDateTexts.forEach((e) => {
+			document.getElementsByClassName("js-calender-date").forEach((e) => {
 				e.innerText = `${calenderDate.getFullYear()}/${calenderDate.getMonth() + 1}`;
 			});
 		}
 
 		// undoneList, doneListのtaskのdatetime-localの値を読み取り、calenderにそれぞれ色をつける関数
-		function markCalender() {
+		// dateStr: "YYYY-MM-DDTHH:MI"
+		function markCalender(dateStr) {
 			//document.getElementsByClassName("undoneList")[1].querySelector("input[name=time_limit]").value
+		}
+
+		function zeroPadding(n) {
+			return (n < 10 ? "0" : "") + n;
+		}
+
+		// actualUndoneListからundoneTaskListを組み立てる関数
+		function buildUndoneTaskList(date) {
+			const actualUndoneList = document.getElementById("actualUndoneList");
+			const undoneListDisplayer = document.getElementById("undoneListDisplayer");
+
+			let undoneListHtml = "";
+			
+			actualUndoneList.children.forEach((child) => {
+				const taskName = child.querySelector("input[name=title]").value;
+				const timeLimit = child.querySelector("input[name=time_limit]").value;
+				const doneFlg = child.querySelector("input[name=done_flg]").value;
+				const taskId = child.querySelector("input[name=id]").value;
+				
+				const [matched, _, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
+					return /^\d+$/.test(e) ? Number.parseInt(e) : e;
+				});
+
+				if (year === date.getFullYear() && month === (date.getMonth() + 1)) {
+					undoneListHtml += `<li class="task" data-id="${taskId}" data-doneFlg="${doneFlg}" data-fullTimeLimit="${matched}">`;
+					undoneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
+					undoneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
+					undoneListHtml += `</li>`;
+				}
+			});
+
+			if (undoneListHtml === "") {
+				undoneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
+			}
+
+			undoneListDisplayer.innerHTML = undoneListHtml;
+
+			undoneListDisplayer.children.forEach((task) => {
+				task.addEventListener("click", (ev) => {
+					// currenttargetでevent発生元の要素を取得できるらしい
+					popupController.showUpdateTaskPopup(ev.currentTarget);
+				});
+			});
+		}
+
+		//actualDoneListからdoneTaskListを組み立てる関数
+		function buildDoneTaskList(date) {
+			const actualDoneList = document.getElementById("actualDoneList");
+			const doneListDisplayer = document.getElementById("doneListDisplayer");
+
+			let doneListHtml = "";
+			
+			actualDoneList.children.forEach((child) => {
+				const taskName = child.querySelector("input[name=title]").value;
+				const timeLimit = child.querySelector("input[name=time_limit]").value;
+				const doneFlg = child.querySelector("input[name=done_flg]").value;
+				const taskId = child.querySelector("input[name=id]").value;
+				
+				const [matched, _, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map((e) => {
+					return /^\d+$/.test(e) ? Number.parseInt(e) : e;
+				});
+
+				if (year === date.getFullYear() && month === (date.getMonth() + 1)) {
+					doneListHtml += `<li class="task" data-id="${taskId}" data-doneFlg="${doneFlg}" data-fullTimeLimit="${matched}">`;
+					doneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
+					doneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
+					doneListHtml += `</li>`;
+				}
+			});
+
+			if (doneListHtml === "") {
+				doneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
+			}
+
+			doneListDisplayer.innerHTML = doneListHtml;
+
+			doneListDisplayer.children.forEach((task) => {
+				task.addEventListener("click", (ev) => {
+					// currenttargetでevent発生元の要素を取得できるらしい
+					popupController.showUpdateTaskPopup(ev.currentTarget);
+				});
+			});
+			// const actualDoneList = document.getElementById("actualDoneList");
+			// const doneListDisplayer = document.getElementById("doneListDisplayer");
+
+			// let doneListHtml = "";
+			
+			// actualDoneList.children.forEach((child) => {
+			// 	const taskName = child.querySelector("input[name=title]").value;
+			// 	const timeLimit = child.querySelector("input[name=time_limit]").value;
+			// 	const doneFlg = child.querySelector("input[name=done_flg]").value;
+			// 	const taskId = child.querySelector("input[name=id]").value;
+				
+			// 	const [_, __, year, month, day, hour, min] = DATETIME_LOCAL_REGEX.exec(timeLimit).map(e => Number.parseInt(e));
+
+			// 	if (year === date.getFullYear() && month === (date.getMonth() + 1)) {
+			// 		doneListHtml += `<li class="task" data-id="${taskId}" data-doneFlg="${doneFlg}">`;
+			// 		doneListHtml += `<p class="task-title">${taskName || "タイトル未設定"}</p>`;
+			// 		doneListHtml += `<p class="task-time-limit">Time Limit: ${zeroPadding(day)}日${zeroPadding(hour)}時${zeroPadding(min)}分`;
+			// 		doneListHtml += `</li>`;
+			// 	}
+			// });
+
+			// if (doneListHtml === "") {
+			// 	doneListHtml = `<p class="task-not-found-message">Task Not Found 404</p>`;
+			// }
+
+			// doneListDisplayer.innerHTML = doneListHtml;
+
+			// doneListDisplayer.children.forEach((task) => {
+			// 	task.addEventListener("click", (ev) => {
+			// 		// currenttargetでevent発生元の要素を取得できるらしい
+			// 		popupController.showUpdateTaskPopup(ev.currentTarget);
+			// 	});
+			// });
+		}
+
+		// 引数taskでupdateTaskPopupを組み立てる関数
+		function buildUpdateTaskPopup(task) {
 		}
 
 
@@ -541,10 +750,12 @@
 				setCalenderHtml(now);
 			}
 
+			// メンバ変数currentDateをそのまま返す
 			getCurrentDate() {
 				return this.currentDate;
 			}
 
+			// カレンダーを現在の一か月前にセットする
 			setCalenderLastMonth() {
 				this.monthOffset--;
 				const year = this.now.getFullYear();
@@ -553,6 +764,7 @@
 				setCalenderHtml(currentDate);
 			}
 
+			// カレンダーを減在の一か月後にセットする
 			setCalenderNextMonth() {
 				this.monthOffset++;
 				const year = this.now.getFullYear();
@@ -562,50 +774,127 @@
 			}
 		}
 
+		// DoneListとUndoneListの表示を切り替えるクラス
 		class ContainerWrapperController {
 			constructor() {
-				this.undoneListShowing = true;
-				this.doneListShowing = false;
+				/*
+				0: undoneListが表示されている
+				1: doneListが表示されている
+				*/
+				this.state = 0;
 
 				document.getElementById("doneWrapper").classList.add("hidden-container-wrapper");
 			}
 
+			// 未完了のタスクを表示させる
 			showUndoneList() {
-				if (!this.undoneListShowing && this.doneListShowing) {
+				if (this.state !== 0) {
 					const undoneWrapper = document.getElementById("undoneWrapper");
 					const doneWrapper = document.getElementById("doneWrapper");
 
 					if (undoneWrapper && doneWrapper) {
 						undoneWrapper.classList.remove("hidden-container-wrapper");
 						doneWrapper.classList.add("hidden-container-wrapper");
+						this.state = 0;
 					}
-					this.undoneListShowing = true;
-					this.doneListShowing = false;
 				} else {
 					console.warn("undoneListはすでに表示されています。");
 				}
 			}
 
+			// 完了済みのタスクを表示させる
 			showDoneList() {
-				if (this.undoneListShowing && !this.doneListShowing) {
+				if (this.state !== 1) {
 					const undoneWrapper = document.getElementById("undoneWrapper");
 					const doneWrapper = document.getElementById("doneWrapper");
 
 					if (undoneWrapper && doneWrapper) {
 						undoneWrapper.classList.add("hidden-container-wrapper");
 						doneWrapper.classList.remove("hidden-container-wrapper");
+						this.state = 1;
 					}
-
-					this.undoneListShowing = false;
-					this.doneListShowing = true;
 				} else {
 					console.warn("doneListはすでに表示されています。");
 				}
 			}
 		}
+
+		class PopupController {
+			constructor() {
+				/*
+				0: 何もポップアップされていない
+				1: 設定が表示されている
+				2: タスク編集が表示されている
+				3: タスク追加が表示されている
+				*/
+				this.state = 0;
+
+				const popupContainer = this.popupContainer = document.getElementById("popupContainer");
+				popupContainer.style.display = "none";
+
+				// ポップアップ時の後ろのくろいやつをクリックしたらポップアップを隠すイベントの追加
+				let _this = this;
+				document.getElementById("popupBack").addEventListener("click", (e) => {
+					_this.hidePopup();
+				});
+			}
+
+			// popupを隠す
+			hidePopup() {
+				if (this.state !== 0) {
+					this.popupContainer.style.display = "none";
+					this.state = 0;
+				}
+			}
+
+			// 設定ポップアップを表示し、stateを1にする
+			showSettingsPopup() {
+				if (this.state === 0) {
+					this.popupContainer.style.display = "block";
+					this.state = 1;
+				}
+			}
+
+			// タスク編集ポップアップを表示し、stateを2にする
+			showUpdateTaskPopup(task) {
+				if (this.state === 0) {
+					if (task instanceof HTMLLIElement && "id" in task.dataset) {
+						const popupForm = document.getElementById("popupForm");
+						const taskDoneFlg = task.dataset.doneflg;
+						const taskId = task.dataset.id;
+						const taskTitle = task.getElementsByClassName("task-title")[0].innerHTML;
+						const taskTimeLimit = task.dataset.fulltimelimit;
+
+						popupForm.querySelector("input[name=id]").value = taskId;
+						//test
+						popupForm.querySelector("input[name=done_flg]").checked = Boolean(Number.parseInt(taskDoneFlg));
+						popupForm.querySelector("input[name=done_flg]").value = taskDoneFlg;
+						popupForm.querySelector("input[name=title]").value = taskTitle;
+						popupForm.querySelector("input[name=time_limit]").value = taskTimeLimit;
+
+						document.getElementById("popupTitle").innerText = "タスクを編集";
+						
+						this.popupContainer.style.display = "block";
+						this.state = 2;
+					}
+				}
+			}
+
+			// タスク追加ポップアップを表示し、stateを3にする
+			showAddTaskPopup() {
+				if (this.state === 0) {
+					this.popupContainer.style.display = "block";
+					this.state = 3;
+				}
+			}
+		}
+
+		// それぞれのcontrollerのインスタンスを生成
 		const calenderController = new CalenderController();
 		const containerWrapperController = new ContainerWrapperController();
+		const popupController = new PopupController();
 
+		// それぞれのボタンにcontrollerのメソッドを呼び出すイベントを追加
 		document.getElementById("showUndoneList").addEventListener("click", (e) => {
 			containerWrapperController.showUndoneList();
 		});
