@@ -516,6 +516,7 @@
 		<div class="popup-container" id="popupContainer">
 			<div class="popup-back" id="popupBack"></div>
 			<div class="settings-container" id="settingsPopup">
+				<h2>設定</h2>
 				<div class="settings-item"></div>
 				<div class="settings-item"></div>
 			</div>
@@ -847,6 +848,8 @@
 
 				const popupContainer = this.popupContainer = document.getElementById("popupContainer");
 				popupContainer.style.display = "none";
+				document.getElementById("settingsPopup").style.display = "none";
+				document.getElementById("todoPopup").style.display = "none";
 
 				// ポップアップ時の後ろのくろいやつをクリックしたらポップアップを隠すイベントの追加
 				let _this = this;
@@ -858,6 +861,8 @@
 			// popupを隠す
 			hidePopup() {
 				if (this.state !== 0) {
+					document.getElementById("settingsPopup").style.display = "none";
+					document.getElementById("todoPopup").style.display = "none";
 					this.popupContainer.style.display = "none";
 					this.state = 0;
 				}
@@ -866,6 +871,7 @@
 			// 設定ポップアップを表示し、stateを1にする
 			showSettingsPopup() {
 				if (this.state === 0) {
+					document.getElementById("settingsPopup").style.display = "flex";
 					this.popupContainer.style.display = "block";
 					this.state = 1;
 				}
@@ -909,6 +915,7 @@
 
 						document.getElementById("popupTitle").innerText = "タスクを編集";
 						
+						document.getElementById("todoPopup").style.display = "flex";
 						this.popupContainer.style.display = "block";
 						this.state = 2;
 					}
