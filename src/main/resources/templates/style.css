@@ -248,7 +248,7 @@ td.is-disabled {
     background-color: #000000bf;
 }
 
-.todo-add-popup-container {
+.popup {
     position: relative;
     left: 0;
     top: 0;

@@ -11,7 +11,7 @@
 	<img th:src="@{/img/forest.jpg}" alt="森" class="back-image">
 	<div class="content-wrapper">
 
-		<header>
+		<header id="showSettingsButton">
 			<h1>FetCH₂() TodoList</h1>
 		</header>
 
@@ -83,12 +83,7 @@
 
 		<div class="popup-container" id="popupContainer">
 			<div class="popup-back" id="popupBack"></div>
-			<div class="settings-container" id="settingsPopup">
-				<h2>設定</h2>
-				<div class="settings-item"></div>
-				<div class="settings-item"></div>
-			</div>
-			<div class="todo-add-popup-container" id="todoPopup">
+			<div class="popup" id="todoPopup">
 				<h2 class="popup-title" id="popupTitle">タスクを追加</h2>
 				<form th:action="@{/update}" method="post" class="popup-form" id="popupForm">
 					<div>

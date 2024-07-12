@@ -39,7 +39,7 @@ function createCalenderHtml(date) {
     let dayCount = 1;
     let calenderHtml = "";
 
-    calenderHtml += `<h1>${currentYear}/${currentMonth}</h1>`;
+    calenderHtml += `<h1>${currentYear}/${zeroPadding(currentMonth)}</h1>`;
     calenderHtml += "<table>";
 
     //Sun. ~ Sat. のやつ
@@ -56,11 +56,11 @@ function createCalenderHtml(date) {
         for (let j = 0; j < WEEK_COUNT; j++) {
             if (i === 0 && j < monthStartDay) {
                 //月の最初の週かつ、月の始まりの曜日の前なら
-                let num = lastMonthEndDate.getDate() - monthStartDay + j + 1;
+                const num = lastMonthEndDate.getDate() - monthStartDay + j + 1;
                 calenderHtml += `<td class="is-disabled">${num}</td>`;
             } else if (dayCount > endDayCount) {
                 //月の
-                let num = dayCount - endDayCount;
+                const num = dayCount - endDayCount;
                 calenderHtml += `<td class="is-disabled">${num}</td>`;
                 dayCount++;
             } else {
@@ -87,7 +87,7 @@ function onUpdateCalender() {
     buildUndoneTaskList(calenderDate);
 
     document.getElementsByClassName("js-calender-date").forEach((e) => {
-        e.innerText = `${calenderDate.getFullYear()}/${calenderDate.getMonth() + 1}`;
+        e.innerText = `${calenderDate.getFullYear()}/${zeroPadding(calenderDate.getMonth() + 1)}`;
     });
 }
 
@@ -292,12 +292,10 @@ class PopupController {
 
         const popupContainer = this.popupContainer = document.getElementById("popupContainer");
         popupContainer.style.display = "none";
-        document.getElementById("settingsPopup").style.display = "none";
-        document.getElementById("todoPopup").style.display = "none";
 
         // ポップアップ時の後ろのくろいやつをクリックしたらポップアップを隠すイベントの追加
-        let _this = this;
-        document.getElementById("popupBack").addEventListener("click", (e) => {
+        const _this = this;
+        document.getElementById("popupBack").addEventListener("click", (_e) => {
             _this.hidePopup();
         });
     }
@@ -305,8 +303,6 @@ class PopupController {
     // popupを隠す
     hidePopup() {
         if (this.state !== 0) {
-            document.getElementById("settingsPopup").style.display = "none";
-            document.getElementById("todoPopup").style.display = "none";
             this.popupContainer.style.display = "none";
             this.state = 0;
         }
@@ -315,7 +311,22 @@ class PopupController {
     // 設定ポップアップを表示し、stateを1にする
     showSettingsPopup() {
         if (this.state === 0) {
-            document.getElementById("settingsPopup").style.display = "flex";
+            document.getElementById("popupForm").innerHTML = `
+                <div class="popup-form-item">
+                    <h3>背景画像</h3>
+                    <input type="file" name="gazou" accept="image/*" required />
+                </div>
+
+                <div class="popup-form-item">
+                    <input type="submit" value="登録" />
+                </div>
+            `;
+
+            document.getElementById("popupTitle").innerText = "背景画像の追加";
+
+            document.getElementById("popupForm").action = location.href + "background_image";
+
+            document.getElementById("todoPopup").style.display = "flex";
             this.popupContainer.style.display = "block";
             this.state = 1;
         }
@@ -358,8 +369,9 @@ class PopupController {
                 popupForm.innerHTML = popupFormHtml;
 
                 document.getElementById("popupTitle").innerText = "タスクを編集";
+
+                popupForm.action = location.href + "update";
                 
-                document.getElementById("todoPopup").style.display = "flex";
                 this.popupContainer.style.display = "block";
                 this.state = 2;
             }
@@ -369,8 +381,6 @@ class PopupController {
     // タスク追加ポップアップを表示し、stateを3にする
     showAddTaskPopup() {
         if (this.state === 0) {
-            this.popupContainer.style.display = "block";
-
             document.getElementById("popupForm").innerHTML = `
                 <div class="popup-form-item">
                     <h3>タスクの名前</h3>
@@ -389,6 +399,11 @@ class PopupController {
             `;
 
             document.getElementById("popupTitle").innerText = "タスクを追加";
+
+            document.getElementById("popupForm").action = location.href + "add";
+
+            document.getElementById("todoPopup").style.display = "flex";
+            this.popupContainer.style.display = "block";
 
             this.state = 3;
         }
@@ -419,6 +434,10 @@ document.getElementById("setCalenderLastMonth").addEventListener("click", (_e) =
 document.getElementById("setCalenderNextMonth").addEventListener("click", (_e) => {
     calenderController.setCalenderNextMonth();
     onUpdateCalender();
+});
+
+document.getElementById("showSettingsButton").addEventListener("click", (_e) => {
+    popupController.showSettingsPopup();
 });
 
 onUpdateCalender();
