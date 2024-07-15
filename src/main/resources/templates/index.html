@@ -86,28 +86,7 @@
 			<div class="popup" id="todoPopup">
 				<h2 class="popup-title" id="popupTitle">タスクを追加</h2>
 				<form th:action="@{/update}" method="post" class="popup-form" id="popupForm">
-					<div>
-						<h3>タスクの名前</h3>
-						<input type="text" name="title" placeholder="タスクの名前" required />
-					</div>
 
-					<div>
-						<label for="done_flg">タスクが終わったかどうか</label>
-						<br>
-						<input type="checkbox" name="done_flg" id="done_flg"/>
-					</div>
-
-					<div>
-						<h3>タスクをいつまでに終わらせるか</h3>
-						<small>カレンダーのアイコンをクリックして詳細に編集します</small>
-						<input type="datetime-local" name="time_limit" required />
-					</div>
-
-					<div>
-						<input type="submit" value="更新">
-					</div>
-
-					<input type="hidden" name="id" />
 				</form>
 			</div>
 		</div>
